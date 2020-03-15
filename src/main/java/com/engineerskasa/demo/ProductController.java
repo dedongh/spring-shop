@@ -36,7 +36,24 @@ public class ProductController {
 
     @PostMapping("/products")
     public void add(@RequestBody Product product) {
+        service.save(product);
+    }
 
+    @PutMapping("/products/{product_id}")
+    public ResponseEntity<?> update(@RequestBody Product product, @PathVariable Integer product_id) {
+        try {
+            Product isExists = service.get(product_id);
+            service.save(product);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+    }
+
+    @DeleteMapping("/products/{product_id}")
+    public void delete(@PathVariable Integer product_id) {
+        service.delete(product_id);
     }
 
 }
